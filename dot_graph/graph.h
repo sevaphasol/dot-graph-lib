@@ -48,10 +48,6 @@ class Attributes {
     Attributes&
     setHtml( std::string_view key, std::string_view value );
 
-    template<typename TNum>
-    Attributes&
-    setNumber( std::string_view key, TNum num );
-
     Attributes&
     setBool( std::string_view key, bool value );
 
@@ -137,14 +133,6 @@ class AttributedElement {
     setHtml( std::string_view key, std::string_view value )
     {
         attributes_.setHtml( key, value );
-        return static_cast<Derived&>( *this );
-    }
-
-    template<typename TNum>
-    Derived&
-    setNumber( std::string_view key, TNum value )
-    {
-        attributes_.setNumber( key, value );
         return static_cast<Derived&>( *this );
     }
 

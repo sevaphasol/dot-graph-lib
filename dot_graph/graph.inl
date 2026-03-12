@@ -84,16 +84,6 @@ Attributes::setHtml( std::string_view key, std::string_view value )
     return set( key, value, ValueKind::HTML );
 }
 
-template<typename TNum>
-Attributes&
-Attributes::setNumber( std::string_view key, TNum num )
-{
-    auto& entry = upsert( key );
-    entry.value = std::to_string( num );
-    entry.kind  = ValueKind::RAW;
-    return *this;
-}
-
 Attributes&
 Attributes::setBool( std::string_view key, bool value )
 {
@@ -142,7 +132,7 @@ Attributes::setFontName( std::string_view value )
 Attributes&
 Attributes::setFontSize( std::size_t value )
 {
-    return setNumber( "fontsize", value );
+    return setRaw( "fontsize", std::to_string( value ) );
 }
 
 Attributes&
@@ -160,13 +150,13 @@ Attributes::setStyle( std::string_view value )
 Attributes&
 Attributes::setPenWidth( std::size_t value )
 {
-    return setNumber( "penwidth", value );
+    return setRaw( "penwidth", std::to_string( value ) );
 }
 
 Attributes&
 Attributes::setWeight( std::size_t value )
 {
-    return setNumber( "weight", value );
+    return setRaw( "weight", std::to_string( value ) );
 }
 
 Attributes&
