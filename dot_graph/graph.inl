@@ -172,7 +172,13 @@ Attributes::empty() const
 }
 
 const std::vector<Attributes::Entry>&
-Attributes::entries() const
+Attributes::entries() const &
+{
+    return entries_;
+}
+
+std::vector<Attributes::Entry>
+Attributes::entries() const &&
 {
     return entries_;
 }
@@ -261,25 +267,37 @@ Subgraph::id() const
 Subgraph&
 Subgraph::addSubgraph( std::string id )
 {
-    subgraphs_.push_back( std::make_unique<Subgraph>( std::move( id ) ) );
-    return *subgraphs_.back();
+    subgraphs_.push_back( Subgraph( std::move( id ) ) );
+    return subgraphs_.back();
 }
 
 Node&
 Subgraph::addNode( std::string id )
 {
-    nodes_.push_back( std::make_unique<Node>( std::move( id ) ) );
-    return *nodes_.back();
+    nodes_.push_back( Node( std::move( id) ) );
+    return nodes_.back();
 }
 
-const std::vector<std::unique_ptr<Subgraph>>&
-Subgraph::subgraphs() const
+const std::vector<Subgraph>&
+Subgraph::subgraphs() const &
 {
     return subgraphs_;
 }
 
-const std::vector<std::unique_ptr<Node>>&
-Subgraph::nodes() const
+std::vector<Subgraph>
+Subgraph::subgraphs() const &&
+{
+    return subgraphs_;
+}
+
+const std::vector<Node>&
+Subgraph::nodes() const &
+{
+    return nodes_;
+}
+
+std::vector<Node>
+Subgraph::nodes() const &&
 {
     return nodes_;
 }
@@ -298,12 +316,12 @@ Subgraph::write( std::ostream& os, size_t width ) const
 
     for ( const auto& nested_subgraph : subgraphs_ )
     {
-        nested_subgraph->write( os, width + 2 );
+        nested_subgraph.write( os, width + 2 );
     }
 
     for ( const auto& node : nodes_ )
     {
-        node->write( os, width + 2 );
+        node.write( os, width + 2 );
     }
 
     indent( os, width );
@@ -333,22 +351,22 @@ Graph::edgeAttributes()
 Subgraph&
 Graph::addSubgraph( std::string id )
 {
-    subgraphs_.push_back( std::make_unique<Subgraph>( std::move( id ) ) );
-    return *subgraphs_.back();
+    subgraphs_.push_back( Subgraph( std::move( id) ) );
+    return subgraphs_.back();
 }
 
 Node&
 Graph::addNode( std::string id )
 {
-    nodes_.push_back( std::make_unique<Node>( std::move( id ) ) );
-    return *nodes_.back();
+    nodes_.push_back( Node( std::move( id ) ) );
+    return nodes_.back();
 }
 
 Edge&
 Graph::addEdge( std::string from, std::string to )
 {
-    edges_.push_back( std::make_unique<Edge>( std::move( from ), std::move( to ) ) );
-    return *edges_.back();
+    edges_.push_back( Edge( std::move( from), std::move( to ) ) );
+    return edges_.back();
 }
 
 Graph::
@@ -384,17 +402,17 @@ operator std::string() const
 
     for ( const auto& subgraph : subgraphs_ )
     {
-        subgraph->write( os );
+        subgraph.write( os );
     }
 
     for ( const auto& node : nodes_ )
     {
-        node->write( os );
+        node.write( os );
     }
 
     for ( const auto& edge : edges_ )
     {
-        edge->write( os );
+        edge.write( os );
     }
 
     os << "}\n";
@@ -402,8 +420,9 @@ operator std::string() const
     return os.str();
 }
 
-std::ostream&
-operator<<( std::ostream& os, const Graph& graph )
+template<typename TOutStream>
+TOutStream&
+operator<<( TOutStream& os, const Graph& graph )
 {
     return os << static_cast<std::string>( graph );
 }

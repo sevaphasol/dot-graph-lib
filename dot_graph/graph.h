@@ -91,7 +91,10 @@ class Attributes {
     empty() const;
 
     const std::vector<Entry>&
-    entries() const;
+    entries() const &;
+
+    std::vector<Entry>
+    entries() const &&;
 
     void
     write( std::ostream& os, size_t width = 0 ) const;
@@ -104,13 +107,25 @@ class AttributedElement {
 
   public:
     Attributes&
-    attributes()
+    attributes() &
+    {
+        return attributes_;
+    }
+
+    Attributes
+    attributes() &&
     {
         return attributes_;
     }
 
     const Attributes&
-    attributes() const
+    attributes() const &
+    {
+        return attributes_;
+    }
+
+    const Attributes&
+    attributes() const &&
     {
         return attributes_;
     }
@@ -265,9 +280,9 @@ class Edge : public AttributedElement<Edge> {
 
 class Subgraph : public AttributedElement<Subgraph> {
   private:
-    std::string                            id_;
-    std::vector<std::unique_ptr<Subgraph>> subgraphs_;
-    std::vector<std::unique_ptr<Node>>     nodes_;
+    std::string           id_;
+    std::vector<Subgraph> subgraphs_;
+    std::vector<Node>     nodes_;
 
   public:
     explicit Subgraph( std::string id );
@@ -281,11 +296,17 @@ class Subgraph : public AttributedElement<Subgraph> {
     Node&
     addNode( std::string id );
 
-    const std::vector<std::unique_ptr<Subgraph>>&
-    subgraphs() const;
+    const std::vector<Subgraph>&
+    subgraphs() const &;
 
-    const std::vector<std::unique_ptr<Node>>&
-    nodes() const;
+    std::vector<Subgraph>
+    subgraphs() const &&;
+
+    const std::vector<Node>&
+    nodes() const &;
+
+    std::vector<Node>
+    nodes() const &&;
 
     void
     write( std::ostream& os, size_t width = 0 ) const override;
@@ -293,13 +314,13 @@ class Subgraph : public AttributedElement<Subgraph> {
 
 class Graph {
   private:
-    std::string                            id_;
-    Attributes                             graph_attributes_;
-    Attributes                             node_attributes_;
-    Attributes                             edge_attributes_;
-    std::vector<std::unique_ptr<Subgraph>> subgraphs_;
-    std::vector<std::unique_ptr<Node>>     nodes_;
-    std::vector<std::unique_ptr<Edge>>     edges_;
+    std::string           id_;
+    Attributes            graph_attributes_;
+    Attributes            node_attributes_;
+    Attributes            edge_attributes_;
+    std::vector<Subgraph> subgraphs_;
+    std::vector<Node>     nodes_;
+    std::vector<Edge>     edges_;
 
   public:
     explicit Graph( std::string id );
@@ -322,8 +343,9 @@ class Graph {
     operator std::string() const;
 };
 
-std::ostream&
-operator<<( std::ostream& os, const Graph& graph );
+template<typename TOutStream>
+TOutStream&
+operator<<( TOutStream& os, const Graph& graph );
 
 } // namespace dot_graph
 
