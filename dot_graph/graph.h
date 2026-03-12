@@ -40,61 +40,58 @@ class Attributes {
 
   public:
     Attributes&
-    setQuoted( std::string_view key, std::string_view value );
+    setQuoted( std::string_view key, std::string_view value ) &;
 
     Attributes&
-    setRaw( std::string_view key, std::string_view value );
+    setRaw( std::string_view key, std::string_view value ) &;
 
     Attributes&
-    setHtml( std::string_view key, std::string_view value );
+    setHtml( std::string_view key, std::string_view value ) &;
 
     Attributes&
-    setBool( std::string_view key, bool value );
+    setBool( std::string_view key, bool value ) &;
 
     Attributes&
-    setQuotedLabel( std::string_view value );
+    setQuotedLabel( std::string_view value ) &;
 
     Attributes&
-    setHtmlLabel( std::string_view value );
+    setHtmlLabel( std::string_view value ) &;
 
     Attributes&
-    setColor( std::string_view value );
+    setColor( std::string_view value ) &;
 
     Attributes&
-    setFillColor( std::string_view value );
+    setFillColor( std::string_view value ) &;
 
     Attributes&
-    setFontColor( std::string_view value );
+    setFontColor( std::string_view value ) &;
 
     Attributes&
-    setFontName( std::string_view value );
+    setFontName( std::string_view value ) &;
 
     Attributes&
-    setFontSize( std::size_t value );
+    setFontSize( std::size_t value ) &;
 
     Attributes&
-    setShape( std::string_view value );
+    setShape( std::string_view value ) &;
 
     Attributes&
-    setStyle( std::string_view value );
+    setStyle( std::string_view value ) &;
 
     Attributes&
-    setPenWidth( std::size_t value );
+    setPenWidth( std::size_t value ) &;
 
     Attributes&
-    setWeight( std::size_t value );
+    setWeight( std::size_t value ) &;
 
     Attributes&
-    setConstraint( bool value );
+    setConstraint( bool value ) &;
 
     bool
     empty() const;
 
     const std::vector<Entry>&
     entries() const &;
-
-    std::vector<Entry>
-    entries() const &&;
 
     void
     write( std::ostream& os, size_t width = 0 ) const;
@@ -112,131 +109,125 @@ class AttributedElement {
         return attributes_;
     }
 
-    Attributes
-    attributes() &&
-    {
-        return attributes_;
-    }
-
     const Attributes&
     attributes() const &
     {
         return attributes_;
     }
 
-    const Attributes&
-    attributes() const &&
+    void
+    SetAttributes( const Attributes& attrs )
     {
-        return attributes_;
+        attributes_ = attrs;
     }
 
     Derived&
-    setQuoted( std::string_view key, std::string_view value )
+    setQuoted( std::string_view key, std::string_view value ) &
     {
         attributes_.setQuoted( key, value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setRaw( std::string_view key, std::string_view value )
+    setRaw( std::string_view key, std::string_view value ) &
     {
         attributes_.setRaw( key, value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setHtml( std::string_view key, std::string_view value )
+    setHtml( std::string_view key, std::string_view value ) &
     {
         attributes_.setHtml( key, value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setBool( std::string_view key, bool value )
+    setBool( std::string_view key, bool value ) &
     {
         attributes_.setBool( key, value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setQuotedLabel( std::string_view value )
+    setQuotedLabel( std::string_view value ) &
     {
         attributes_.setQuotedLabel( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setHtmlLabel( std::string_view value )
+    setHtmlLabel( std::string_view value ) &
     {
         attributes_.setHtmlLabel( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setColor( std::string_view value )
+    setColor( std::string_view value ) &
     {
         attributes_.setColor( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setFillColor( std::string_view value )
+    setFillColor( std::string_view value ) &
     {
         attributes_.setFillColor( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setFontColor( std::string_view value )
+    setFontColor( std::string_view value ) &
     {
         attributes_.setFontColor( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setFontName( std::string_view value )
+    setFontName( std::string_view value ) &
     {
         attributes_.setFontName( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setFontSize( std::size_t value )
+    setFontSize( std::size_t value ) &
     {
         attributes_.setFontSize( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setShape( std::string_view value )
+    setShape( std::string_view value ) &
     {
         attributes_.setShape( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setStyle( std::string_view value )
+    setStyle( std::string_view value ) &
     {
         attributes_.setStyle( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setPenWidth( std::size_t value )
+    setPenWidth( std::size_t value ) &
     {
         attributes_.setPenWidth( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setWeight( std::size_t value )
+    setWeight( std::size_t value ) &
     {
         attributes_.setWeight( value );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setConstraint( bool value )
+    setConstraint( bool value ) &
     {
         attributes_.setConstraint( value );
         return static_cast<Derived&>( *this );
@@ -246,7 +237,7 @@ class AttributedElement {
     write( std::ostream& os, size_t width = 0 ) const = 0;
 };
 
-class Node : public AttributedElement<Node> {
+class Node final : public AttributedElement<Node> {
   private:
     std::string id_;
 
@@ -254,13 +245,13 @@ class Node : public AttributedElement<Node> {
     explicit Node( std::string id );
 
     const std::string&
-    id() const;
+    id() const &;
 
     void
     write( std::ostream& os, size_t width = 0 ) const override;
 };
 
-class Edge : public AttributedElement<Edge> {
+class Edge final : public AttributedElement<Edge> {
   private:
     std::string from_;
     std::string to_;
@@ -269,16 +260,16 @@ class Edge : public AttributedElement<Edge> {
     Edge( std::string from, std::string to );
 
     const std::string&
-    from() const;
+    from() const &;
 
     const std::string&
-    to() const;
+    to() const &;
 
     void
     write( std::ostream& os, size_t width = 0 ) const override;
 };
 
-class Subgraph : public AttributedElement<Subgraph> {
+class Subgraph final : public AttributedElement<Subgraph> {
   private:
     std::string           id_;
     std::vector<Subgraph> subgraphs_;
@@ -288,31 +279,25 @@ class Subgraph : public AttributedElement<Subgraph> {
     explicit Subgraph( std::string id );
 
     const std::string&
-    id() const;
+    id() const &;
 
     Subgraph&
-    addSubgraph( std::string id );
+    addSubgraph( std::string id ) &;
 
     Node&
-    addNode( std::string id );
+    addNode( std::string id ) &;
 
     const std::vector<Subgraph>&
     subgraphs() const &;
 
-    std::vector<Subgraph>
-    subgraphs() const &&;
-
     const std::vector<Node>&
     nodes() const &;
-
-    std::vector<Node>
-    nodes() const &&;
 
     void
     write( std::ostream& os, size_t width = 0 ) const override;
 };
 
-class Graph {
+class Graph final {
   private:
     std::string           id_;
     Attributes            graph_attributes_;
@@ -341,6 +326,10 @@ class Graph {
 
     explicit
     operator std::string() const;
+
+    void
+    translateWithDot( const std::string& filename,
+                      const std::string& out_type);
 };
 
 template<typename TOutStream>
