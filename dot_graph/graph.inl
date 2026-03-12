@@ -1,8 +1,10 @@
-#include "dot_graph/graph.h"
+#pragma once
 
 #include <sstream>
 #include <string>
 #include <utility>
+
+#include "dot_graph/graph.h"
 
 namespace dot_graph {
 
@@ -408,6 +410,12 @@ operator std::string() const
     os << "}\n";
 
     return os.str();
+}
+
+std::ostream&
+operator<<( std::ostream& os, const Graph& graph )
+{
+    return os << static_cast<std::string>( graph );
 }
 
 } // namespace dot_graph

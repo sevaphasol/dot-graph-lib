@@ -5,27 +5,8 @@ set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-set( SOURCES_DIR "sources" )
-set( INCLUDE_DIR "include" )
+set( DOT_GRAPH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" )
 
-set( DOT_GRAPH_SOURCES_DIR "${SOURCES_DIR}/dot_graph" )
-set( DOT_GRAPH_INCLUDE_DIR "${INCLUDE_DIR}/dot_graph" )
+add_library( DotGraphLib INTERFACE )
 
-file(
-    GLOB_RECURSE
-    DOT_GRAPH_SOURCES
-    ${DOT_GRAPH_SOURCES_DIR}/*.cpp
-)
-
-add_library(
-    DotGraphLib
-    SHARED
-    ${DOT_GRAPH_SOURCES}
-)
-
-target_include_directories( DotGraphLib PUBLIC ${INCLUDE_DIR} )
-
-install(
-    TARGETS DotGraphLib
-    LIBRARY DESTINATION lib
-)
+target_include_directories( DotGraphLib INTERFACE ${DOT_GRAPH_INCLUDE_DIR} )
