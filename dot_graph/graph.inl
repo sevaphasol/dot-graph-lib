@@ -404,7 +404,7 @@ operator std::string() const
 
 void
 Graph::translateWithDot( const std::string& filename,
-                         const std::string& out_type)
+                         const std::string& out_type) const
 {
     std::string cmd = "dot -T" + out_type + " -o " + filename;
 

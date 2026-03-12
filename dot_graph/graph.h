@@ -329,7 +329,7 @@ class Graph final {
 
     void
     translateWithDot( const std::string& filename,
-                      const std::string& out_type);
+                      const std::string& out_type) const;
 };
 
 template<typename TOutStream>
