@@ -67,25 +67,25 @@ Attributes::set( std::string_view key, std::string_view value, ValueKind kind )
 }
 
 Attributes&
-Attributes::setQuoted( std::string_view key, std::string_view value )
+Attributes::setQuoted( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::QUOTED );
 }
 
 Attributes&
-Attributes::setRaw( std::string_view key, std::string_view value )
+Attributes::setRaw( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::RAW );
 }
 
 Attributes&
-Attributes::setHtml( std::string_view key, std::string_view value )
+Attributes::setHtml( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::HTML );
 }
 
 Attributes&
-Attributes::setBool( std::string_view key, bool value )
+Attributes::setBool( std::string_view key, bool value ) &
 {
     auto& entry = upsert( key );
     entry.value = value ? "true" : "false";
@@ -94,73 +94,73 @@ Attributes::setBool( std::string_view key, bool value )
 }
 
 Attributes&
-Attributes::setQuotedLabel( std::string_view value )
+Attributes::setQuotedLabel( std::string_view value ) &
 {
     return setQuoted( "label", value );
 }
 
 Attributes&
-Attributes::setHtmlLabel( std::string_view value )
+Attributes::setHtmlLabel( std::string_view value ) &
 {
     return setHtml( "label", value );
 }
 
 Attributes&
-Attributes::setColor( std::string_view value )
+Attributes::setColor( std::string_view value ) &
 {
     return setQuoted( "color", value );
 }
 
 Attributes&
-Attributes::setFillColor( std::string_view value )
+Attributes::setFillColor( std::string_view value ) &
 {
     return setQuoted( "fillcolor", value );
 }
 
 Attributes&
-Attributes::setFontColor( std::string_view value )
+Attributes::setFontColor( std::string_view value ) &
 {
     return setQuoted( "fontcolor", value );
 }
 
 Attributes&
-Attributes::setFontName( std::string_view value )
+Attributes::setFontName( std::string_view value ) &
 {
     return setQuoted( "fontname", value );
 }
 
 Attributes&
-Attributes::setFontSize( std::size_t value )
+Attributes::setFontSize( std::size_t value ) &
 {
     return setRaw( "fontsize", std::to_string( value ) );
 }
 
 Attributes&
-Attributes::setShape( std::string_view value )
+Attributes::setShape( std::string_view value ) &
 {
     return setQuoted( "shape", value );
 }
 
 Attributes&
-Attributes::setStyle( std::string_view value )
+Attributes::setStyle( std::string_view value ) &
 {
     return setQuoted( "style", value );
 }
 
 Attributes&
-Attributes::setPenWidth( std::size_t value )
+Attributes::setPenWidth( std::size_t value ) &
 {
     return setRaw( "penwidth", std::to_string( value ) );
 }
 
 Attributes&
-Attributes::setWeight( std::size_t value )
+Attributes::setWeight( std::size_t value ) &
 {
     return setRaw( "weight", std::to_string( value ) );
 }
 
 Attributes&
-Attributes::setConstraint( bool value )
+Attributes::setConstraint( bool value ) &
 {
     return setBool( "constraint", value );
 }
@@ -172,7 +172,7 @@ Attributes::empty() const
 }
 
 const std::vector<Attributes::Entry>&
-Attributes::entries() const
+Attributes::entries() const &
 {
     return entries_;
 }
@@ -202,7 +202,7 @@ Attributes::write( std::ostream& os, size_t width ) const
 Node::Node( std::string id ) : id_( std::move( id ) ) {}
 
 const std::string&
-Node::id() const
+Node::id() const &
 {
     return id_;
 }
@@ -227,13 +227,13 @@ Edge::Edge( std::string from, std::string to )
 }
 
 const std::string&
-Edge::from() const
+Edge::from() const &
 {
     return from_;
 }
 
 const std::string&
-Edge::to() const
+Edge::to() const &
 {
     return to_;
 }
@@ -253,33 +253,33 @@ Edge::write( std::ostream& os, [[maybe_unused]] size_t width ) const
 Subgraph::Subgraph( std::string id ) : id_( std::move( id ) ) {}
 
 const std::string&
-Subgraph::id() const
+Subgraph::id() const &
 {
     return id_;
 }
 
 Subgraph&
-Subgraph::addSubgraph( std::string id )
+Subgraph::addSubgraph( std::string id ) &
 {
-    subgraphs_.push_back( std::make_unique<Subgraph>( std::move( id ) ) );
-    return *subgraphs_.back();
+    subgraphs_.push_back( Subgraph( std::move( id ) ) );
+    return subgraphs_.back();
 }
 
 Node&
-Subgraph::addNode( std::string id )
+Subgraph::addNode( std::string id ) &
 {
-    nodes_.push_back( std::make_unique<Node>( std::move( id ) ) );
-    return *nodes_.back();
+    nodes_.push_back( Node( std::move( id) ) );
+    return nodes_.back();
 }
 
-const std::vector<std::unique_ptr<Subgraph>>&
-Subgraph::subgraphs() const
+const std::vector<Subgraph>&
+Subgraph::subgraphs() const &
 {
     return subgraphs_;
 }
 
-const std::vector<std::unique_ptr<Node>>&
-Subgraph::nodes() const
+const std::vector<Node>&
+Subgraph::nodes() const &
 {
     return nodes_;
 }
@@ -298,12 +298,12 @@ Subgraph::write( std::ostream& os, size_t width ) const
 
     for ( const auto& nested_subgraph : subgraphs_ )
     {
-        nested_subgraph->write( os, width + 2 );
+        nested_subgraph.write( os, width + 2 );
     }
 
     for ( const auto& node : nodes_ )
     {
-        node->write( os, width + 2 );
+        node.write( os, width + 2 );
     }
 
     indent( os, width );
@@ -333,22 +333,22 @@ Graph::edgeAttributes()
 Subgraph&
 Graph::addSubgraph( std::string id )
 {
-    subgraphs_.push_back( std::make_unique<Subgraph>( std::move( id ) ) );
-    return *subgraphs_.back();
+    subgraphs_.push_back( Subgraph( std::move( id) ) );
+    return subgraphs_.back();
 }
 
 Node&
 Graph::addNode( std::string id )
 {
-    nodes_.push_back( std::make_unique<Node>( std::move( id ) ) );
-    return *nodes_.back();
+    nodes_.push_back( Node( std::move( id ) ) );
+    return nodes_.back();
 }
 
 Edge&
 Graph::addEdge( std::string from, std::string to )
 {
-    edges_.push_back( std::make_unique<Edge>( std::move( from ), std::move( to ) ) );
-    return *edges_.back();
+    edges_.push_back( Edge( std::move( from), std::move( to ) ) );
+    return edges_.back();
 }
 
 Graph::
@@ -384,17 +384,17 @@ operator std::string() const
 
     for ( const auto& subgraph : subgraphs_ )
     {
-        subgraph->write( os );
+        subgraph.write( os );
     }
 
     for ( const auto& node : nodes_ )
     {
-        node->write( os );
+        node.write( os );
     }
 
     for ( const auto& edge : edges_ )
     {
-        edge->write( os );
+        edge.write( os );
     }
 
     os << "}\n";
@@ -402,8 +402,32 @@ operator std::string() const
     return os.str();
 }
 
-std::ostream&
-operator<<( std::ostream& os, const Graph& graph )
+void
+Graph::translateWithDot( const std::string& filename,
+                         const std::string& out_type)
+{
+    std::string cmd = "dot -T" + out_type + " -o " + filename;
+
+    FILE* pipe = popen( cmd.c_str(), "w" );
+    if ( !pipe )
+    {
+        throw std::runtime_error( "Failed to open pipe" );
+    }
+
+    std::string dot_graph_str = static_cast<std::string>( *this);
+
+    std::fwrite( dot_graph_str.c_str(), 1, dot_graph_str.size(), pipe );
+
+    int status = pclose( pipe );
+    if ( status != 0 )
+    {
+        throw std::runtime_error( "Graphviz rendering failed" );
+    }
+}
+
+template<typename TOutStream>
+TOutStream&
+operator<<( TOutStream& os, const Graph& graph )
 {
     return os << static_cast<std::string>( graph );
 }
