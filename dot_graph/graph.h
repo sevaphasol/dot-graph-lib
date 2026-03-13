@@ -336,6 +336,61 @@ template<typename TOutStream>
 TOutStream&
 operator<<( TOutStream& os, const Graph& graph );
 
+struct HTMLAttr {
+    HTMLAttr( std::string key,
+              std::string value)
+     :  key( key ),
+        value( value )
+    {
+    }
+
+    std::string key;
+    std::string value;
+};
+
+class HTMLCell final {
+  private:
+    std::vector<HTMLAttr> attributes_{};
+    std::string placeholder_{};
+
+  public:
+    explicit HTMLCell( std::string placeholder);
+
+    explicit
+    operator std::string() const;
+
+    HTMLCell&
+    addAttribute( std::string key, std::string value) &;
+};
+
+class HTMLRow final {
+  private:
+    std::vector<HTMLCell> cells_{};
+
+  public:
+    explicit
+    operator std::string() const;
+
+    HTMLCell&
+    addCell( std::string placeholder) &;
+};
+
+class HTMLTable final {
+  private:
+    std::vector<HTMLRow> rows_{};
+    std::vector<HTMLAttr> attributes_{};
+
+  public:
+    explicit
+    operator std::string() const;
+
+    HTMLRow&
+    addRow() &;
+
+    HTMLTable&
+    addAttribute( std::string key, std::string value) &;
+};
+
 } // namespace dot_graph
 
 #include "dot_graph/graph.inl"
