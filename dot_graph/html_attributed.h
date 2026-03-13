@@ -21,6 +21,9 @@ enum class VAlignValue
     TOP,
 };
 
+namespace html_attributed_
+{
+
 template<typename Derived>
 class HTMLAttributed
 {
@@ -184,4 +187,5 @@ class HTMLAttributed
     }
 };
 
+} // namespace html_attributed_
 } // namespace html

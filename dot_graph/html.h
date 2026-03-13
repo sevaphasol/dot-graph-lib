@@ -8,7 +8,7 @@
 namespace html
 {
 
-class HTMLCell final : public HTMLAttributed<HTMLCell> {
+class HTMLCell final : public html_attributed_::HTMLAttributed<HTMLCell> {
   private:
     std::string placeholder_{};
 
@@ -44,7 +44,7 @@ class HTMLRow final {
     addCell( std::string placeholder) &;
 };
 
-class HTMLTable final : public HTMLAttributed<HTMLCell> {
+class HTMLTable final : public html_attributed_::HTMLAttributed<HTMLCell> {
   private:
     std::vector<HTMLRow> rows_{};
 
