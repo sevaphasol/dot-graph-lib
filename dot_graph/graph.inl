@@ -53,7 +53,7 @@ Attributes::upsert( std::string_view key )
         }
     }
 
-    entries_.push_back( Entry{ std::string( key ) } );
+    entries_.push_back( Entry{ std::string( key ), {}, {} } );
     return entries_.back();
 }
 
