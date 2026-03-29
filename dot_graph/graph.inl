@@ -8,7 +8,7 @@
 
 namespace dot_graph {
 
-namespace {
+namespace detail {
 
 inline void
 indent( std::ostream& os, size_t width )
@@ -19,12 +19,12 @@ indent( std::ostream& os, size_t width )
     }
 }
 
-} // namespace
+} // namespace detail
 
-void
+inline void
 Attributes::Entry::write( std::ostream& os, size_t width ) const
 {
-    indent( os, width );
+    detail::indent( os, width );
 
     os << key << '=';
 
@@ -42,7 +42,7 @@ Attributes::Entry::write( std::ostream& os, size_t width ) const
     }
 }
 
-Attributes::Entry&
+inline Attributes::Entry&
 Attributes::upsert( std::string_view key )
 {
     for ( auto& entry : entries_ )
@@ -57,7 +57,7 @@ Attributes::upsert( std::string_view key )
     return entries_.back();
 }
 
-Attributes&
+inline Attributes&
 Attributes::set( std::string_view key, std::string_view value, ValueKind kind )
 {
     auto& entry = upsert( key );
@@ -66,25 +66,25 @@ Attributes::set( std::string_view key, std::string_view value, ValueKind kind )
     return *this;
 }
 
-Attributes&
+inline Attributes&
 Attributes::setQuoted( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::QUOTED );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setRaw( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::RAW );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setHtml( std::string_view key, std::string_view value ) &
 {
     return set( key, value, ValueKind::HTML );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setBool( std::string_view key, bool value ) &
 {
     auto& entry = upsert( key );
@@ -93,94 +93,94 @@ Attributes::setBool( std::string_view key, bool value ) &
     return *this;
 }
 
-Attributes&
+inline Attributes&
 Attributes::setQuotedLabel( std::string_view value ) &
 {
     return setQuoted( "label", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setHtmlLabel( std::string_view value ) &
 {
     return setHtml( "label", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setColor( std::string_view value ) &
 {
     return setQuoted( "color", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setFillColor( std::string_view value ) &
 {
     return setQuoted( "fillcolor", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setFontColor( std::string_view value ) &
 {
     return setQuoted( "fontcolor", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setFontName( std::string_view value ) &
 {
     return setQuoted( "fontname", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setFontSize( std::size_t value ) &
 {
     return setRaw( "fontsize", std::to_string( value ) );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setShape( std::string_view value ) &
 {
     return setQuoted( "shape", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setStyle( std::string_view value ) &
 {
     return setQuoted( "style", value );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setPenWidth( std::size_t value ) &
 {
     return setRaw( "penwidth", std::to_string( value ) );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setWeight( std::size_t value ) &
 {
     return setRaw( "weight", std::to_string( value ) );
 }
 
-Attributes&
+inline Attributes&
 Attributes::setConstraint( bool value ) &
 {
     return setBool( "constraint", value );
 }
 
-bool
+inline bool
 Attributes::empty() const
 {
     return entries_.empty();
 }
 
-const std::vector<Attributes::Entry>&
+inline const std::vector<Attributes::Entry>&
 Attributes::entries() const &
 {
     return entries_;
 }
 
-void
+inline void
 Attributes::write( std::ostream& os, size_t width ) const
 {
-    indent( os, width );
+    detail::indent( os, width );
 
     os << '[';
 
@@ -199,18 +199,19 @@ Attributes::write( std::ostream& os, size_t width ) const
     os << ']';
 }
 
+inline
 Node::Node( std::string id ) : id_( std::move( id ) ) {}
 
-const std::string&
+inline const std::string&
 Node::id() const &
 {
     return id_;
 }
 
-void
+inline void
 Node::write( std::ostream& os, size_t width ) const
 {
-    indent( os, width );
+    detail::indent( os, width );
 
     os << id_;
     if ( !attributes_.empty() )
@@ -221,24 +222,25 @@ Node::write( std::ostream& os, size_t width ) const
     os << ";\n";
 }
 
+inline
 Edge::Edge( std::string from, std::string to )
     : from_( std::move( from ) ), to_( std::move( to ) )
 {
 }
 
-const std::string&
+inline const std::string&
 Edge::from() const &
 {
     return from_;
 }
 
-const std::string&
+inline const std::string&
 Edge::to() const &
 {
     return to_;
 }
 
-void
+inline void
 Edge::write( std::ostream& os, [[maybe_unused]] size_t width ) const
 {
     os << from_ << " -> " << to_;
@@ -250,44 +252,44 @@ Edge::write( std::ostream& os, [[maybe_unused]] size_t width ) const
     os << ";\n";
 }
 
-Subgraph::Subgraph( std::string id ) : id_( std::move( id ) ) {}
+inline Subgraph::Subgraph( std::string id ) : id_( std::move( id ) ) {}
 
-const std::string&
+inline const std::string&
 Subgraph::id() const &
 {
     return id_;
 }
 
-Subgraph&
+inline Subgraph&
 Subgraph::addSubgraph( std::string id ) &
 {
     subgraphs_.push_back( Subgraph( std::move( id ) ) );
     return subgraphs_.back();
 }
 
-Node&
+inline Node&
 Subgraph::addNode( std::string id ) &
 {
     nodes_.push_back( Node( std::move( id) ) );
     return nodes_.back();
 }
 
-const std::vector<Subgraph>&
+inline const std::vector<Subgraph>&
 Subgraph::subgraphs() const &
 {
     return subgraphs_;
 }
 
-const std::vector<Node>&
+inline const std::vector<Node>&
 Subgraph::nodes() const &
 {
     return nodes_;
 }
 
-void
+inline void
 Subgraph::write( std::ostream& os, size_t width ) const
 {
-    indent( os, width );
+    detail::indent( os, width );
     os << "subgraph " << id_ << " {\n";
 
     for ( const auto& entry : attributes_.entries() )
@@ -306,52 +308,52 @@ Subgraph::write( std::ostream& os, size_t width ) const
         node.write( os, width + 2 );
     }
 
-    indent( os, width );
+    detail::indent( os, width );
     os << "}\n";
 }
 
-Graph::Graph( std::string id ) : id_( std::move( id ) ) {}
+inline Graph::Graph( std::string id ) : id_( std::move( id ) ) {}
 
-Attributes&
+inline Attributes&
 Graph::graphAttributes()
 {
     return graph_attributes_;
 }
 
-Attributes&
+inline Attributes&
 Graph::nodeAttributes()
 {
     return node_attributes_;
 }
 
-Attributes&
+inline Attributes&
 Graph::edgeAttributes()
 {
     return edge_attributes_;
 }
 
-Subgraph&
+inline Subgraph&
 Graph::addSubgraph( std::string id )
 {
     subgraphs_.push_back( Subgraph( std::move( id) ) );
     return subgraphs_.back();
 }
 
-Node&
+inline Node&
 Graph::addNode( std::string id )
 {
     nodes_.push_back( Node( std::move( id ) ) );
     return nodes_.back();
 }
 
-Edge&
+inline Edge&
 Graph::addEdge( std::string from, std::string to )
 {
     edges_.push_back( Edge( std::move( from), std::move( to ) ) );
     return edges_.back();
 }
 
-Graph::
+inline Graph::
 operator std::string() const
 {
     std::ostringstream os;
@@ -360,7 +362,7 @@ operator std::string() const
 
     if ( !graph_attributes_.empty() )
     {
-        indent( os, 2 );
+        detail::indent( os, 2 );
         os << "graph ";
         graph_attributes_.write( os );
         os << ";\n";
@@ -368,7 +370,7 @@ operator std::string() const
 
     if ( !node_attributes_.empty() )
     {
-        indent( os, 2 );
+        detail::indent( os, 2 );
         os << "node ";
         node_attributes_.write( os );
         os << ";\n";
@@ -376,7 +378,7 @@ operator std::string() const
 
     if ( !edge_attributes_.empty() )
     {
-        indent( os, 2 );
+        detail::indent( os, 2 );
         os << "edge ";
         edge_attributes_.write( os );
         os << ";\n";
@@ -402,7 +404,7 @@ operator std::string() const
     return os.str();
 }
 
-void
+inline void
 Graph::translateWithDot( const std::string& filename,
                          const std::string& out_type) const
 {
