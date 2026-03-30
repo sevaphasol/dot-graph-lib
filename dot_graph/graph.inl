@@ -11,9 +11,9 @@ namespace dot_graph {
 namespace detail {
 
 inline void
-indent( std::ostream& os, size_t width )
+indent( std::ostream& os, std::size_t width )
 {
-    for ( size_t i = 0; i < width; ++i )
+    for ( std::size_t i = 0; i < width; ++i )
     {
         os << ' ';
     }
@@ -22,7 +22,7 @@ indent( std::ostream& os, size_t width )
 } // namespace detail
 
 inline void
-Attributes::Entry::write( std::ostream& os, size_t width ) const
+Attributes::Entry::write( std::ostream& os, std::size_t width ) const
 {
     detail::indent( os, width );
 
@@ -178,7 +178,7 @@ Attributes::entries() const &
 }
 
 inline void
-Attributes::write( std::ostream& os, size_t width ) const
+Attributes::write( std::ostream& os, std::size_t width ) const
 {
     detail::indent( os, width );
 
@@ -209,7 +209,7 @@ Node::id() const &
 }
 
 inline void
-Node::write( std::ostream& os, size_t width ) const
+Node::write( std::ostream& os, std::size_t width ) const
 {
     detail::indent( os, width );
 
@@ -241,7 +241,7 @@ Edge::to() const &
 }
 
 inline void
-Edge::write( std::ostream& os, [[maybe_unused]] size_t width ) const
+Edge::write( std::ostream& os, [[maybe_unused]] std::size_t width ) const
 {
     os << from_ << " -> " << to_;
     if ( !attributes_.empty() )
@@ -287,7 +287,7 @@ Subgraph::nodes() const &
 }
 
 inline void
-Subgraph::write( std::ostream& os, size_t width ) const
+Subgraph::write( std::ostream& os, std::size_t width ) const
 {
     detail::indent( os, width );
     os << "subgraph " << id_ << " {\n";

@@ -56,14 +56,14 @@ HTMLCell::setStyle( std::string value ) &
 }
 
 HTMLCell&
-HTMLCell::setColSpan( uint16_t value ) &
+HTMLCell::setColSpan( std::uint16_t value ) &
 {
     attributes_.emplace_back( HTMLAttr( "COLSPAN", std::to_string( value ) ) );
     return *this;
 }
 
 HTMLCell&
-HTMLCell::setRowSpan( uint16_t value ) &
+HTMLCell::setRowSpan( std::uint16_t value ) &
 {
     attributes_.emplace_back( HTMLAttr( "ROWSPAN", std::to_string( value ) ) );
     return *this;

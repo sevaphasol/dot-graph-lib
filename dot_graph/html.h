@@ -26,10 +26,10 @@ class HTMLCell final : public html_attributed_::HTMLAttributed<HTMLCell> {
     setStyle( std::string value ) &;
 
     HTMLCell&
-    setColSpan( uint16_t value ) &;
+    setColSpan( std::uint16_t value ) &;
 
     HTMLCell&
-    setRowSpan( uint16_t value ) &;
+    setRowSpan( std::uint16_t value ) &;
 };
 
 class HTMLRow final {

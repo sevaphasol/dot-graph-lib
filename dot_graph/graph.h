@@ -25,7 +25,7 @@ class Attributes {
         ValueKind   kind;
 
         void
-        write( std::ostream& os, size_t width = 0 ) const;
+        write( std::ostream& os, std::size_t width = 0 ) const;
     };
 
   private:
@@ -94,7 +94,7 @@ class Attributes {
     entries() const &;
 
     void
-    write( std::ostream& os, size_t width = 0 ) const;
+    write( std::ostream& os, std::size_t width = 0 ) const;
 };
 
 template<typename Derived>
@@ -234,7 +234,7 @@ class AttributedElement {
     }
 
     virtual void
-    write( std::ostream& os, size_t width = 0 ) const = 0;
+    write( std::ostream& os, std::size_t width = 0 ) const = 0;
 };
 
 class Node final : public AttributedElement<Node> {
@@ -248,7 +248,7 @@ class Node final : public AttributedElement<Node> {
     id() const &;
 
     void
-    write( std::ostream& os, size_t width = 0 ) const override;
+    write( std::ostream& os, std::size_t width = 0 ) const override;
 };
 
 class Edge final : public AttributedElement<Edge> {
@@ -266,7 +266,7 @@ class Edge final : public AttributedElement<Edge> {
     to() const &;
 
     void
-    write( std::ostream& os, size_t width = 0 ) const override;
+    write( std::ostream& os, std::size_t width = 0 ) const override;
 };
 
 class Subgraph final : public AttributedElement<Subgraph> {
@@ -294,7 +294,7 @@ class Subgraph final : public AttributedElement<Subgraph> {
     nodes() const &;
 
     void
-    write( std::ostream& os, size_t width = 0 ) const override;
+    write( std::ostream& os, std::size_t width = 0 ) const override;
 };
 
 class Graph final {
