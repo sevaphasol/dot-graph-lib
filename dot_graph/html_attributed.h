@@ -63,14 +63,14 @@ class HTMLAttributed
     }
 
     Derived&
-    setBorder( uint8_t value ) &
+    setBorder( std::uint8_t value ) &
     {
         attributes_.emplace_back( HTMLAttr( "BORDER", std::to_string( value ) ) );
         return static_cast<Derived&>( *this );
     }
 
     Derived&
-    setCellBorder( uint8_t value ) &
+    setCellBorder( std::uint8_t value ) &
     {
         assert( value < 128 );
         attributes_.emplace_back( HTMLAttr( "CELLBORDER", std::to_string( value ) ) );
@@ -78,7 +78,7 @@ class HTMLAttributed
     }
 
     Derived&
-    setCellSpacing( uint8_t value ) &
+    setCellSpacing( std::uint8_t value ) &
     {
         assert( value < 128 );
         attributes_.emplace_back( HTMLAttr( "CELLSPACING", std::to_string( value ) ) );
@@ -100,7 +100,7 @@ class HTMLAttributed
     }
 
     Derived&
-    setGradientAngle( uint32_t value ) &
+    setGradientAngle( std::uint32_t value ) &
     {
         assert( value <= 360 );
         attributes_.emplace_back( HTMLAttr( "GRADIENTANGLE", std::to_string( value ) ) );
@@ -108,7 +108,7 @@ class HTMLAttributed
     }
 
     Derived&
-    setHeight( uint16_t value ) &
+    setHeight( std::uint16_t value ) &
     {
         attributes_.emplace_back( HTMLAttr( "HEIGHT", std::to_string( value ) ) );
         return static_cast<Derived&>( *this );
@@ -180,7 +180,7 @@ class HTMLAttributed
     }
 
     Derived&
-    setWidth( uint16_t value ) &
+    setWidth( std::uint16_t value ) &
     {
         attributes_.emplace_back( HTMLAttr( "WIDTH", std::to_string( value ) ) );
         return static_cast<Derived&>( *this );
